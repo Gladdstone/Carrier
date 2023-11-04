@@ -1,6 +1,7 @@
-use iced::executor;
 use iced::widget::{column, container, text_input};
-use iced::{Application, Command, Element, TextInput, Theme};
+use iced::{Application, Command, Element, executor, Settings, Theme};
+
+mod testrequest;
 
 fn main() -> iced::Result {
   Carrier::run(Settings::default())
@@ -13,7 +14,7 @@ struct Carrier {
 
 #[derive(Debug, Clone)]
 enum Message {
-  TextInputChanged(TextInput::Action),
+  TextInputChanged(String),
 }
 
 impl Application for Carrier {
@@ -22,8 +23,10 @@ impl Application for Carrier {
   type Executor = executor::Default;
   type Flags = ();
 
-  fn new(_flags: Self::Flags) -> Self, Command<Message>) {
-    Self.default()
+  fn new(_flags: Self::Flags) -> (Self, Command<Message>) {
+    (Self {
+      input: "".to_string()
+    }, Command::none())
   }
 
   fn title(&self) -> String {
@@ -32,14 +35,16 @@ impl Application for Carrier {
 
   fn update(&mut self, message: Message) -> Command<Message> {
     match message {
-      Message::TextInputChanged(action) => {
-        self.content.edit(action)
+      Message::TextInputChanged(newText) => {
+        self.input = newText;
       }
     }
+
+    Command::none()
   }
 
   fn view(&self) -> iced::Element<Message> {
-    let request_url = TextInput::new("request url", "")
+    let request_url = text_input::TextInput::new("request url", "")
       .on_input(Message::TextInputChanged)
       .padding(10);
 
