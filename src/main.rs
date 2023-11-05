@@ -44,7 +44,7 @@ impl Application for Carrier {
   }
 
   fn view(&self) -> iced::Element<Message> {
-    let request_url = text_input::TextInput::new("request url", "")
+    let request_url = text_input::TextInput::new("request url", &self.input)
       .on_input(Message::TextInputChanged)
       .padding(10);
 
